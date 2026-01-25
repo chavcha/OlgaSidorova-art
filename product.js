@@ -4,7 +4,7 @@ const productDatabase = {
     id: 1,
     title: "Огненный цветок матери",
     category: "painting",
-    price: 25000,
+    price: 70000,
     image: "images/mother's-ember-flower.jpg",
     material: "Масло, холст",
     size: "50x70 см",
@@ -21,7 +21,7 @@ const productDatabase = {
     id: 2,
     title: "Инь Ян",
     category: "painting",
-    price: 30000,
+    price: 70000,
     image: "images/ying-yang.jpg",
     material: "Масло, холст",
     size: "50x70 см",
@@ -72,7 +72,7 @@ const productDatabase = {
     id: 5,
     title: "Сила Рода",
     category: "painting",
-    price: 45000,
+    price: 70000,
     image: "images/kind's-power.jpg",
     material: "Масло, холст",
     size: "50x70 см",
@@ -526,7 +526,7 @@ function renderProduct() {
     `;
 
   // Update page title
-  document.title = `${product.title} - Галерея картин`;
+  document.title = `${product.title} - Olga Sidorova Art`;
 
   // Add click handler to product image (if single image)
   const productImage = container.querySelector("[data-product-id]");
