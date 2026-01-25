@@ -19,7 +19,7 @@
 }
 
 .nav-arrow {
-    position: sticky;
+    position: fixed;
     top: 50%;
     transform: translateY(-50%);
     width: 50px;
@@ -47,11 +47,11 @@
 }
 
 .nav-arrow-left {
-    left: 0;
+    left: 1.5rem;
 }
 
 .nav-arrow-right {
-    right: 0;
+    right: 1.5rem;
 }
 
 .nav-arrow span {
@@ -376,6 +376,14 @@
         font-size: 1.5rem;
     }
 
+    .nav-arrow-left {
+        left: 1rem;
+    }
+
+    .nav-arrow-right {
+        right: 1rem;
+    }
+
     .product-wrapper {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -410,6 +418,14 @@
         width: 35px;
         height: 35px;
         font-size: 1.2rem;
+    }
+
+    .nav-arrow-left {
+        left: 0.75rem;
+    }
+
+    .nav-arrow-right {
+        right: 0.75rem;
     }
 
     .product-wrapper {
