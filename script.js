@@ -208,6 +208,7 @@ const shopData = [
 
 // Initialize on DOM load
 document.addEventListener("DOMContentLoaded", function () {
+  scrollToIndexSectionInitial();
   initializeNavigation();
   initializeShop();
   initializeModal();
@@ -215,27 +216,50 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeContactForm();
 });
 
+function scrollToIndexSectionInitial() {
+  if (!window.SiteRoutes) return;
+  const section = SiteRoutes.getIndexSectionFromPath();
+  const el = document.getElementById(section);
+  if (!el) return;
+  requestAnimationFrame(function () {
+    el.scrollIntoView({ block: "start" });
+  });
+}
+
 // Navigation
 function initializeNavigation() {
-  const navLinks = document.querySelectorAll(".nav-link");
   const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
   const nav = document.querySelector(".nav");
 
-  navLinks.forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      const targetId = this.getAttribute("href").substring(1);
-      const targetSection = document.getElementById(targetId);
+  document.body.addEventListener("click", function (e) {
+    if (!window.SiteRoutes || !SiteRoutes.getSiteBasePath()) return;
+    const a = e.target.closest("a");
+    if (!a) return;
+    const href = a.getAttribute("href");
+    if (!href || !SiteRoutes.isIndexSection(href)) return;
+    const targetSection = document.getElementById(href);
+    if (!targetSection) return;
+    e.preventDefault();
+    history.pushState({ section: href }, "", SiteRoutes.pathTo(href));
+    targetSection.scrollIntoView({ behavior: "smooth" });
+    const navLink = document.querySelector(
+      '.nav-link[data-section="' + href + '"]',
+    );
+    if (navLink) updateActiveNavLink(navLink);
+    if (nav && nav.classList.contains("active")) {
+      nav.classList.remove("active");
+    }
+  });
 
-      if (targetSection) {
-        targetSection.scrollIntoView({ behavior: "smooth" });
-        updateActiveNavLink(this);
-        // Close mobile menu after clicking a link
-        if (nav && nav.classList.contains("active")) {
-          nav.classList.remove("active");
-        }
-      }
-    });
+  window.addEventListener("popstate", function () {
+    if (!window.SiteRoutes) return;
+    const section = SiteRoutes.getIndexSectionFromPath();
+    const el = document.getElementById(section);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+    const link = document.querySelector(
+      '.nav-link[data-section="' + section + '"]',
+    );
+    if (link) updateActiveNavLink(link);
   });
 
   if (mobileMenuToggle) {
@@ -276,7 +300,9 @@ function updateActiveNavOnScroll() {
     const sectionTop = section.offsetTop;
     const sectionHeight = section.offsetHeight;
     const sectionId = section.getAttribute("id");
-    const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+    const navLink = document.querySelector(
+      `.nav-link[data-section="${sectionId}"]`,
+    );
 
     if (
       scrollPos >= sectionTop &&
@@ -354,7 +380,11 @@ function imagePathToProductSlug(imagePath) {
 
 function shopItemProductHref(item) {
   const slug = imagePathToProductSlug(item.image);
-  return slug ? `product.html#${slug}` : `product.html?id=${item.id}`;
+  if (!slug) return `product.html?id=${item.id}`;
+  if (window.SiteRoutes && SiteRoutes.getSiteBasePath()) {
+    return SiteRoutes.pathTo(slug);
+  }
+  return `product.html#${slug}`;
 }
 
 // Shop

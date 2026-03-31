@@ -355,8 +355,25 @@ function getSlugToIdMap() {
   return slugToIdMapCache;
 }
 
-// Get product ID from URL (?id= legacy или #slug)
+function shopPageHref() {
+  if (window.SiteRoutes && SiteRoutes.getSiteBasePath()) {
+    return SiteRoutes.pathTo("shop");
+  }
+  return "shop";
+}
+
+// Get product ID from URL: /repo/slug, затем ?id=, затем #slug
 function getProductId() {
+  if (window.SiteRoutes) {
+    const after = SiteRoutes.pathnameAfterRepo();
+    if (after.length) {
+      const last = after[after.length - 1];
+      if (!last.endsWith(".html") && !SiteRoutes.isIndexSection(last)) {
+        const id = getSlugToIdMap()[last.toLowerCase()];
+        if (id) return id;
+      }
+    }
+  }
   const params = new URLSearchParams(window.location.search);
   const idParam = params.get("id");
   if (idParam !== null && idParam !== "") {
@@ -384,6 +401,15 @@ function syncProductUrlSlug(product) {
     product.image || (product.images && product.images[0]) || "",
   );
   if (!slug) return;
+  if (window.SiteRoutes && SiteRoutes.getSiteBasePath()) {
+    const desired = SiteRoutes.pathTo(slug);
+    const cur = window.location.pathname.replace(/\/+$/, "");
+    const want = desired.replace(/\/+$/, "");
+    if (cur !== want || window.location.search || window.location.hash) {
+      history.replaceState(null, "", desired);
+    }
+    return;
+  }
   const params = new URLSearchParams(window.location.search);
   const currentHash = window.location.hash.replace(/^#/, "");
   if (params.has("id") || currentHash !== slug) {
@@ -446,7 +472,9 @@ function renderProduct() {
 
   if (!productId) {
     container.innerHTML =
-      '<div class="error">Товар не найден. <a href="./#shop">Вернуться в магазин</a></div>';
+      '<div class="error">Товар не найден. <a href="' +
+      shopPageHref() +
+      '">Вернуться в магазин</a></div>';
     return;
   }
 
@@ -454,7 +482,9 @@ function renderProduct() {
 
   if (!product) {
     container.innerHTML =
-      '<div class="error">Товар не найден. <a href="./#shop">Вернуться в магазин</a></div>';
+      '<div class="error">Товар не найден. <a href="' +
+      shopPageHref() +
+      '">Вернуться в магазин</a></div>';
     return;
   }
 
@@ -661,9 +691,17 @@ function initializeNavigationArrows() {
       if (currentId) {
         const prevId = getPrevProductId(currentId);
         const prevSlug = getSlugForProductId(prevId);
-        window.location.href = prevSlug
-          ? `product.html#${prevSlug}`
-          : `product.html?id=${prevId}`;
+        if (
+          window.SiteRoutes &&
+          SiteRoutes.getSiteBasePath() &&
+          prevSlug
+        ) {
+          window.location.href = SiteRoutes.pathTo(prevSlug);
+        } else if (prevSlug) {
+          window.location.href = `product.html#${prevSlug}`;
+        } else {
+          window.location.href = `product.html?id=${prevId}`;
+        }
       }
     });
   }
@@ -676,9 +714,17 @@ function initializeNavigationArrows() {
       if (currentId) {
         const nextId = getNextProductId(currentId);
         const nextSlug = getSlugForProductId(nextId);
-        window.location.href = nextSlug
-          ? `product.html#${nextSlug}`
-          : `product.html?id=${nextId}`;
+        if (
+          window.SiteRoutes &&
+          SiteRoutes.getSiteBasePath() &&
+          nextSlug
+        ) {
+          window.location.href = SiteRoutes.pathTo(nextSlug);
+        } else if (nextSlug) {
+          window.location.href = `product.html#${nextSlug}`;
+        } else {
+          window.location.href = `product.html?id=${nextId}`;
+        }
       }
     });
   }

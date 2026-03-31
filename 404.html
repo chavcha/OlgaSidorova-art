@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Загрузка…</title>
+    <script>
+      (function () {
+        var REPO = "OlgaSidorova-art";
+        var SECTIONS = { home: 1, shop: 1, about: 1, contacts: 1 };
+        var STATIC = { images: 1, icons: 1, videos: 1 };
+        var path = window.location.pathname.replace(/\/+$/, "");
+        var seg = path.split("/").filter(Boolean);
+        var ix = seg.indexOf(REPO);
+        if (ix === -1) return;
+        var rest = seg.slice(ix + 1);
+        var first = rest[0];
+        var basePath = "/" + seg.slice(0, ix + 1).join("/") + "/";
+        if (!first) {
+          window.location.replace(basePath + "index.html");
+          return;
+        }
+        if (first.endsWith(".html")) return;
+        if (STATIC[first]) return;
+        sessionStorage.setItem(
+          "spaPath",
+          path || window.location.pathname,
+        );
+        if (SECTIONS[first]) {
+          sessionStorage.setItem("spaTarget", "index");
+          window.location.replace(basePath + "index.html");
+        } else {
+          sessionStorage.setItem("spaTarget", "product");
+          window.location.replace(basePath + "product.html");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <p>
+      Страница не найдена.
+      <a href="/OlgaSidorova-art/">На главную</a>
+    </p>
+  </body>
+</html>
