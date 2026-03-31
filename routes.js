@@ -13,14 +13,14 @@
     const s = String(segment || "").replace(/^\/+|\/+$/g, "");
     const b = getSiteBasePath();
     if (b) return b + "/" + s;
-    return s;
+    return "/" + s;
   }
 
   function pathnameAfterRepo() {
     const segs = global.location.pathname.split("/").filter(Boolean);
     const i = segs.indexOf(REPO_SEGMENT);
-    if (i === -1) return [];
-    return segs.slice(i + 1);
+    if (i !== -1) return segs.slice(i + 1);
+    return segs;
   }
 
   function isIndexSection(name) {
@@ -72,9 +72,14 @@
     const after = pathnameAfterRepo();
     if (after.length) return;
     const b = getSiteBasePath();
-    if (!b) return;
     const cur = global.location.pathname.replace(/\/+$/, "");
-    if (cur === b || cur === b + "/") {
+    if (b) {
+      if (cur === b || cur === b + "/") {
+        history.replaceState(null, "", pathTo("home"));
+      }
+      return;
+    }
+    if (!cur) {
       history.replaceState(null, "", pathTo("home"));
     }
   }

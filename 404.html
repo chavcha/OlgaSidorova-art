@@ -11,10 +11,16 @@
         var path = window.location.pathname.replace(/\/+$/, "");
         var seg = path.split("/").filter(Boolean);
         var ix = seg.indexOf(REPO);
-        if (ix === -1) return;
-        var rest = seg.slice(ix + 1);
+        var rest;
+        var basePath;
+        if (ix !== -1) {
+          rest = seg.slice(ix + 1);
+          basePath = "/" + seg.slice(0, ix + 1).join("/") + "/";
+        } else {
+          rest = seg;
+          basePath = "/";
+        }
         var first = rest[0];
-        var basePath = "/" + seg.slice(0, ix + 1).join("/") + "/";
         if (!first) {
           window.location.replace(basePath + "index.html");
           return;
@@ -36,9 +42,6 @@
     </script>
   </head>
   <body>
-    <p>
-      Страница не найдена.
-      <a href="/OlgaSidorova-art/">На главную</a>
-    </p>
+    <p>Страница не найдена. <a href="index.html">На главную</a></p>
   </body>
 </html>

@@ -1,0 +1,28 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/home", "destination": "/index.html" },
+    { "source": "/shop", "destination": "/index.html" },
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/contacts", "destination": "/index.html" },
+    { "source": "/mothers-ember-flower", "destination": "/product.html" },
+    { "source": "/ying-yang", "destination": "/product.html" },
+    { "source": "/summer", "destination": "/product.html" },
+    { "source": "/emerging-planet", "destination": "/product.html" },
+    { "source": "/kinds-power", "destination": "/product.html" },
+    { "source": "/souls-dance", "destination": "/product.html" },
+    { "source": "/shivalingam", "destination": "/product.html" },
+    { "source": "/tenderness", "destination": "/product.html" },
+    { "source": "/path-to-deep", "destination": "/product.html" },
+    { "source": "/shamanka", "destination": "/product.html" },
+    { "source": "/lifes-reborn", "destination": "/product.html" },
+    { "source": "/kinds-women", "destination": "/product.html" },
+    { "source": "/power", "destination": "/product.html" },
+    { "source": "/unity", "destination": "/product.html" },
+    { "source": "/dance-of-energies", "destination": "/product.html" },
+    { "source": "/meeting", "destination": "/product.html" },
+    { "source": "/pachamama", "destination": "/product.html" },
+    { "source": "/calendar2026", "destination": "/product.html" }
+  ]
+}

@@ -356,9 +356,7 @@ function getSlugToIdMap() {
 }
 
 function shopPageHref() {
-  if (window.SiteRoutes && SiteRoutes.getSiteBasePath()) {
-    return SiteRoutes.pathTo("shop");
-  }
+  if (window.SiteRoutes) return SiteRoutes.pathTo("shop");
   return "shop";
 }
 
@@ -401,7 +399,7 @@ function syncProductUrlSlug(product) {
     product.image || (product.images && product.images[0]) || "",
   );
   if (!slug) return;
-  if (window.SiteRoutes && SiteRoutes.getSiteBasePath()) {
+  if (window.SiteRoutes) {
     const desired = SiteRoutes.pathTo(slug);
     const cur = window.location.pathname.replace(/\/+$/, "");
     const want = desired.replace(/\/+$/, "");
@@ -691,11 +689,7 @@ function initializeNavigationArrows() {
       if (currentId) {
         const prevId = getPrevProductId(currentId);
         const prevSlug = getSlugForProductId(prevId);
-        if (
-          window.SiteRoutes &&
-          SiteRoutes.getSiteBasePath() &&
-          prevSlug
-        ) {
+        if (window.SiteRoutes && prevSlug) {
           window.location.href = SiteRoutes.pathTo(prevSlug);
         } else if (prevSlug) {
           window.location.href = `product.html#${prevSlug}`;
@@ -714,11 +708,7 @@ function initializeNavigationArrows() {
       if (currentId) {
         const nextId = getNextProductId(currentId);
         const nextSlug = getSlugForProductId(nextId);
-        if (
-          window.SiteRoutes &&
-          SiteRoutes.getSiteBasePath() &&
-          nextSlug
-        ) {
+        if (window.SiteRoutes && nextSlug) {
           window.location.href = SiteRoutes.pathTo(nextSlug);
         } else if (nextSlug) {
           window.location.href = `product.html#${nextSlug}`;

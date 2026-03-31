@@ -232,7 +232,7 @@ function initializeNavigation() {
   const nav = document.querySelector(".nav");
 
   document.body.addEventListener("click", function (e) {
-    if (!window.SiteRoutes || !SiteRoutes.getSiteBasePath()) return;
+    if (!window.SiteRoutes || !document.getElementById("home")) return;
     const a = e.target.closest("a");
     if (!a) return;
     const href = a.getAttribute("href");
@@ -381,9 +381,7 @@ function imagePathToProductSlug(imagePath) {
 function shopItemProductHref(item) {
   const slug = imagePathToProductSlug(item.image);
   if (!slug) return `product.html?id=${item.id}`;
-  if (window.SiteRoutes && SiteRoutes.getSiteBasePath()) {
-    return SiteRoutes.pathTo(slug);
-  }
+  if (window.SiteRoutes) return SiteRoutes.pathTo(slug);
   return `product.html#${slug}`;
 }
 
