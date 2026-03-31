@@ -303,7 +303,7 @@ const productDatabase = {
     title: "Календарь 2026",
     category: "painting",
     price: 2000,
-    image: "images/calendar-1.jpg",
+    image: "images/calendar2026.jpg",
     material: "Печать, бумага",
     size: "A3",
     description:
@@ -321,7 +321,7 @@ const productDatabase = {
         `,
     video: "videos/calendar-video.mp4",
     images: [
-      "images/calendar-1.jpg",
+      "images/calendar2026.jpg",
       "images/calendar-2.jpg",
       "images/calendar-3.jpg",
     ],
