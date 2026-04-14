@@ -204,6 +204,42 @@ const shopData = [
       "images/calendar-3.jpg",
     ],
   },
+  {
+    id: 19,
+    title: "Обережная",
+    category: "painting",
+    price: 25000,
+    image: "images/oberezhnaya.jpg",
+    material: "Масло, холст",
+    size: "50×50 см",
+    description:
+      "Символическая работа о защите, внутренней силе и связи с природой. Картина наполнена теплой энергией и ощущением поддержки.",
+  },
+  {
+    id: 20,
+    title: "Реальная иллюзия",
+    category: "painting",
+    price: 35000,
+    image: "images/real-illusion.jpg",
+    material: "Масло, холст",
+    size: "50×70 см",
+    description:
+      "Экспрессивная композиция, исследующая границу между реальным и воображаемым. Контрастные формы и цвета создают ощущение многослойной реальности.",
+  },
+  {
+    id: 21,
+    title: "Печать на холсте",
+    category: "painting",
+    price: 3680,
+    pricePrefix: "от",
+    image: "images/holst-print.jpg",
+    material: "Печать, холст",
+    size: "20x27 см и больше",
+    description:
+      "Печать выбранной картины на холсте в разных форматах. В карточке доступны видео и фото с примерами и актуальной сеткой цен.",
+    video: "videos/holst-video.mp4",
+    images: ["images/holst-print.jpg", "images/holst-price-list.jpg"],
+  },
 ];
 
 // Initialize on DOM load
@@ -218,7 +254,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function scrollToIndexSectionInitial() {
   if (!window.SiteRoutes) return;
-  const section = SiteRoutes.getIndexSectionFromPath();
+  let section = SiteRoutes.getIndexSectionFromPath();
+  const hashSection = window.location.hash.replace(/^#/, "");
+  if (SiteRoutes.isIndexSection(hashSection)) {
+    section = hashSection;
+  }
   const el = document.getElementById(section);
   if (!el) return;
   requestAnimationFrame(function () {
@@ -231,19 +271,39 @@ function initializeNavigation() {
   const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
   const nav = document.querySelector(".nav");
 
+  function extractSectionFromHref(href) {
+    if (!href) return "";
+    const cleanHref = href.trim();
+    if (SiteRoutes.isIndexSection(cleanHref)) return cleanHref;
+
+    if (cleanHref.startsWith("#")) {
+      const hashName = cleanHref.slice(1);
+      return SiteRoutes.isIndexSection(hashName) ? hashName : "";
+    }
+
+    const hashIdx = cleanHref.indexOf("#");
+    if (hashIdx !== -1) {
+      const hashName = cleanHref.slice(hashIdx + 1);
+      return SiteRoutes.isIndexSection(hashName) ? hashName : "";
+    }
+
+    return "";
+  }
+
   document.body.addEventListener("click", function (e) {
     if (!window.SiteRoutes || !document.getElementById("home")) return;
     const a = e.target.closest("a");
     if (!a) return;
     const href = a.getAttribute("href");
-    if (!href || !SiteRoutes.isIndexSection(href)) return;
-    const targetSection = document.getElementById(href);
+    const section = extractSectionFromHref(href);
+    if (!section) return;
+    const targetSection = document.getElementById(section);
     if (!targetSection) return;
     e.preventDefault();
-    history.pushState({ section: href }, "", SiteRoutes.pathTo(href));
+    history.pushState({ section }, "", SiteRoutes.pathTo(section));
     targetSection.scrollIntoView({ behavior: "smooth" });
     const navLink = document.querySelector(
-      '.nav-link[data-section="' + href + '"]',
+      '.nav-link[data-section="' + section + '"]',
     );
     if (navLink) updateActiveNavLink(navLink);
     if (nav && nav.classList.contains("active")) {
@@ -411,7 +471,7 @@ function createShopItem(item) {
                 <p class="shop-item-category">${getCategoryName(item.category)}</p>
                 ${item.material ? `<p class="shop-item-material">${item.material}</p>` : ""}
                 ${item.size ? `<p class="shop-item-size">Размер: ${item.size}</p>` : ""}
-                <p class="shop-item-price">${formatPrice(item.price)} ₽</p>
+                <p class="shop-item-price">${item.pricePrefix ? item.pricePrefix + " " : ""}${formatPrice(item.price)} ₽</p>
             </div>
         </a>
         <div class="shop-item-buttons">

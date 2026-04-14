@@ -23,6 +23,9 @@
     { "source": "/dance-of-energies", "destination": "/product.html" },
     { "source": "/meeting", "destination": "/product.html" },
     { "source": "/pachamama", "destination": "/product.html" },
-    { "source": "/calendar2026", "destination": "/product.html" }
+    { "source": "/calendar2026", "destination": "/product.html" },
+    { "source": "/oberezhnaya", "destination": "/product.html" },
+    { "source": "/real-illusion", "destination": "/product.html" },
+    { "source": "/holst-print", "destination": "/product.html" }
   ]
 }
